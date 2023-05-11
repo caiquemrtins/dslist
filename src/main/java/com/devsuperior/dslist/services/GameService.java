@@ -7,7 +7,6 @@ import com.devsuperior.dslist.entities.Game;
 import com.devsuperior.dslist.projections.GameMinProjection;
 import com.devsuperior.dslist.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,23 +19,24 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Transactional(readOnly = true)  //esse transactional é para garantir o ACID do BD
-    public GameDTO findById (Long id){
+    public GameDTO findById(Long id) {
         Game result = gameRepository.findById(id).get();
         //o get é pq o findbyid retorna um optional, preciso do get pra pegar o ID
         return new GameDTO(result);
     }
 
     @Transactional(readOnly = true)
-    public List<GameMinDTO> findAll(){
+    public List<GameMinDTO> findAll() {
         List<Game> result = gameRepository.findAll();
         return result.stream().map(x -> new GameMinDTO(x)).toList();
     }
 
     @Transactional(readOnly = true)
-    public List<GameMinDTO> findByList(Long listId){
+    public List<GameMinDTO> findByList(Long listId) {
         List<GameMinProjection> result = gameRepository.searchByList(listId);
         return result.stream().map(x -> new GameMinDTO(x)).toList();  //aqui ele teve que criar um construtor no DTO que recebe minprojection
     }
+
 
 
 }
